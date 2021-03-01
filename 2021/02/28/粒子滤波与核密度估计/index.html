@@ -30,12 +30,16 @@
 <meta property="og:site_name" content="面包君的博客">
 <meta property="og:description" content="Improved Particle Filter Based on Kernel Density Estimation">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228135122.png">
+<meta property="og:image" content="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228145311.png">
+<meta property="og:image" content="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228145429.png">
 <meta property="article:published_time" content="2021-02-27T22:52:34.000Z">
-<meta property="article:modified_time" content="2021-02-27T16:06:26.889Z">
+<meta property="article:modified_time" content="2021-02-28T06:59:40.969Z">
 <meta property="article:author" content="ekko">
 <meta property="article:tag" content="粒子滤波">
 <meta property="article:tag" content="核密度估计">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228135122.png">
 
 <link rel="canonical" href="https://ekkovisa.top/2021/02/28/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/">
 
@@ -140,17 +144,17 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">3</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">9</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">5</span></a>
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">9</span></a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">3</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档<span class="badge">6</span></a>
 
   </li>
         <li class="menu-item menu-item-schedule">
@@ -252,10 +256,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-02-27 22:52:34 / 修改时间：16:06:26" itemprop="dateCreated datePublished" datetime="2021-02-27T22:52:34Z">2021-02-27</time>
+              <time title="创建时间：2021-02-27 22:52:34" itemprop="dateCreated datePublished" datetime="2021-02-27T22:52:34Z">2021-02-27</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-28 06:59:40" itemprop="dateModified" datetime="2021-02-28T06:59:40Z">2021-02-28</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -291,6 +301,11 @@
         <h3 id="Improved-Particle-Filter-Based-on-Kernel-Density-Estimation"><a href="#Improved-Particle-Filter-Based-on-Kernel-Density-Estimation" class="headerlink" title="Improved Particle Filter Based on Kernel Density Estimation"></a>Improved Particle Filter Based on Kernel Density Estimation</h3><a id="more"></a>
 
 <h4 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h4><p>Particle filter (PF) algorithm can be used for nonlinear and non-gaussian system state estimation, the core lies in how to accurately describe the posterior density function with limited particles. In recent years, there have been many improved particle filter algorithms, but the effect is not good in the strong nonlinear/non-Gaussian environment. The improved method proposed in this paper can overcome this difficulty. This method uses kernel density estimation to fit the priori PDF, then evenly sample new particles in a reasonable area and calculate their priori weights. Then these particles’ weights are updated according to the likelihood function, and then normalize the weights, and the state is estimated by using the particles and their normalized weights. This method is called KDE-PF. Simulation results show that this method is better than the general particle filter algorithm.</p>
+<h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><p>Filtering is a method to solve the state estimation problem, which is widely used in power systems [1], robots [2], visual tracking [3], navigation and positioning [4], and other fields. For linear dynamical systems, Kalman filters are used to estimate states through the solving of state equations. In a linear and Gaussian environment, the optimal estimation can be obtained by Kalman Filter [5]. In a nonlinear environment, Anderson and Moore proposed the Extended Kalman Filter (EKF). The EKF linearized the models about a current estimate based on Taylor’s theorem [6]. Then, the EKF gives the optimal (with Minimum Mean Square Error) solution to the linearized problem. Julier and Uhlmann introduced the Unscented Kalman Filter (UKF) [7], which is designed to handle state variable estimation where the system is highly nonlinear that the EKF will do the job poorly, or even fail to do so. Unfortunately, the UKF is much more complex compared to EKF, and still not applicable to non-Gaussian environment.<br>The Particle Filter (PF) provides an approximate Bayesian estimation for nonlinear and non-Gaussian environment [8]. Therefore, the PF has important theoretical and practical significance. Generally, PF has two main problems: particle degradation and impoverishment [9]. To solve these two problems, a variety of improved particle filter algorithms have been proposed. These methods mainly improve the particle.<br>filter algorithm from two aspects, the appropriate proposed distribution, and the resampling technology. The optimal proposed distribution is the true posterior density function of states. The extended particle filter (EPF) and unscented particle filter (UPF) incorporate observational information into a sampling density function to approximate the real posterior probability density function (PDF). However, like the EKF and UKF, the EPF and UPF are not good for strongly nonlinear /non-gaussian systems. Meanwhile, many improved resampling algorithms have been proposed in recent years, such as covariance resampling [10] and independent resampling [11]. These algorithms can effectively overcome the particle degradation problem by making the sampled particles covering the real PDF as much as possible. However, in strongly nonlinear/non-gaussian environment, especially when the observed noise is impulse noise, the particles often deviate from the real value.<br>In this paper, the kernel density estimation is introduced into particle filter to improve filtering performance in strongly nonlinear/non-gaussian environment, which is called the kernel density estimation particle filter (KDE-PF). The KDE-PF fits the prior probability density function of the states by using KDE. Then, the resampled particles are uniformly distributed in an appropriate selected region so that there are particles in both the prior distribution region and the likelihood function region. In this way, the loss of diversity problem of PF can be effectively overcome. The improved particle filter algorithm, KD-EPF, can be applied in the field of satellite navigation, such as improving the positioning accuracy in a nonlinear non-Gaussian environment.<br>The rest of this paper is organized as follows. In the second part, the problems of particle filters are explained. In the third part, the PF algorithm is introduced and then the KDE-PF algorithm is discussed. The fourth part presents the simulation results. The performance of the proposed KDE-PF algorithm is compared with PF, EPF and UPF. The fifth part is the conclusion of the article.</p>
+<h4 id="Problem-Statement"><a href="#Problem-Statement" class="headerlink" title="Problem Statement"></a>Problem Statement</h4><p>The state-space model of a dynamic system consists of two parts: system state equation and observation equation.<br>For state estimation problem, the Bayesian filter corrects prior estimation with observation information to obtain a posterior estimation that is closer to the real value. The core of Bayesian estimation is to construct the posterior pdf. The process generally assumes that the state transition of the system follows the first-order Markov process. The state at the current moment is only related to the state at the previous moment. Bayesian recursion is represented by the block diagram as Fig. 1.</p>
+<p><img data-src="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228135122.png" alt="Fig1 Bayesian recursion "></p>
+<p>The PF can solve the state estimation problem in nonlinear and non-Gaussian environments, the theoretical basis of which is the Monte Carlo simulation and Bayesian filtering algorithm [9]. The key to obtain an accurate posterior PDF is to cover the true value as much as possible with limited sampling points. Therefore, in the particle filter algorithm, it is important to find a suitable importance density function. The general idea is to select the system state transition probability density function as the importance PDF [9]. However, since the latest observation is not considered, particles are usually distributed in the region of the high probability region of the prior distribution, as shown in Fig. 2.<br>The proposed distribution is to transfer some particles to the likelihood function region. So the sampled particles containing measurement information are closer to the real value, as shown in Fig. 3. This is the case with EPF and UPF. While in a strongly nonlinear/non-Gaussian environment, especially when the observed noise is close to impulse noise, particles sampled in this way are unlikely distributed in the high likelihood probability region. The particle weight in the likelihood region is close to zero, and the gap between the posterior distribution described by the sampled particles set and the real posterior distribution is still large.<br><img data-src="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228145311.png" alt="Fig 2 PF particles distribution"></p>
+<p><img data-src="https://ekkopic.oss-cn-beijing.aliyuncs.com/ekko_img/20210228145429.png" alt="Fig 3 Particles migration"></p>
 
     </div>
 
@@ -350,7 +365,10 @@
     <a href="/2020/09/14/%E5%8D%9A%E5%AE%A2%E7%BB%B4%E6%8A%A4%E6%97%A5%E5%BF%97/" rel="prev" title="博客维护更新日志">
       <i class="fa fa-chevron-left"></i> 博客维护更新日志
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/03/01/%E5%8D%AB%E6%98%9F%E5%AF%BC%E8%88%AA%E8%A1%8C%E4%B8%9A%E6%8A%A5%E5%91%8A/" rel="next" title="卫星导航行业报告">
+      卫星导航行业报告 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -410,7 +428,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Improved-Particle-Filter-Based-on-Kernel-Density-Estimation"><span class="nav-number">1.</span> <span class="nav-text">Improved Particle Filter Based on Kernel Density Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Abstract"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Improved-Particle-Filter-Based-on-Kernel-Density-Estimation"><span class="nav-number">1.</span> <span class="nav-text">Improved Particle Filter Based on Kernel Density Estimation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Abstract"><span class="nav-number">1.1.</span> <span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Introduction"><span class="nav-number">1.2.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Problem-Statement"><span class="nav-number">1.3.</span> <span class="nav-text">Problem Statement</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -426,20 +444,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -738,15 +756,23 @@ if(canvas.getContext){
         
         
           <li>
+            <a href="/2021/03/01/%E5%85%B3%E4%BA%8EM2%E6%8C%87%E6%A0%87/" title="关于M2指标" target="_blank">关于M2指标</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E6%83%AF%E6%80%A7%E5%AF%BC%E8%88%AA%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="惯性导航基础知识" target="_blank">惯性导航基础知识</a>
+          </li>
+        
+          <li>
+            <a href="/2021/03/01/%E5%8D%AB%E6%98%9F%E5%AF%BC%E8%88%AA%E8%A1%8C%E4%B8%9A%E6%8A%A5%E5%91%8A/" title="卫星导航行业报告" target="_blank">卫星导航行业报告</a>
+          </li>
+        
+          <li>
             <a href="/2021/02/28/%E7%B2%92%E5%AD%90%E6%BB%A4%E6%B3%A2%E4%B8%8E%E6%A0%B8%E5%AF%86%E5%BA%A6%E4%BC%B0%E8%AE%A1/" title="粒子滤波与核密度估计" target="_blank">粒子滤波与核密度估计</a>
           </li>
         
           <li>
             <a href="/2020/09/14/%E5%8D%9A%E5%AE%A2%E7%BB%B4%E6%8A%A4%E6%97%A5%E5%BF%97/" title="博客维护更新日志" target="_blank">博客维护更新日志</a>
-          </li>
-        
-          <li>
-            <a href="/2020/03/22/%E5%B8%B8%E7%94%A8%E8%AF%AD%E6%B3%95%E6%80%BB%E7%BB%93/" title="常用语法总结" target="_blank">常用语法总结</a>
           </li>
         
       </ul>
